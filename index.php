@@ -53,9 +53,19 @@ function getAlbumPreview($dir)
 	return '';
 }
 
-$shortPath = isset($_SERVER["PATH_INFO"]) ? $_SERVER["PATH_INFO"] : "";
-if ($shortPath == '/') $shortPath = '';
 $scriptUrlPath = substr($_SERVER["SCRIPT_NAME"], 0, -4); // trim .php
+
+// if url == http://localhost/photos/index/toto/titi, path_info == /toto/titi
+// if url == http://localhost/photos/index, path_info is not set
+// if url == http://localhost/photos/, path_info is not set
+// if path_info is not set, we are at top level, so we redirect to /photos/index/
+if (! isset($_SERVER["PATH_INFO"])) {
+	header("Location: $scriptUrlPath/");
+	exit();
+}
+
+$shortPath = $_SERVER["PATH_INFO"];
+if ($shortPath == '/') $shortPath = '';
 
 $folders = array();
 $imageFiles = array();
