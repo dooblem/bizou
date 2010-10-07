@@ -26,7 +26,7 @@ $prevImage = '';
 $nextImage = '';
 if ($pos > 0)
 	$prevImage = $images[$pos-1];
-if ($pos < sizeof($images))
+if ($pos < sizeof($images)-1)
 	$nextImage = $images[$pos+1];
 
 // template variables

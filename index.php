@@ -93,7 +93,7 @@ foreach (scandir($realDir) as $file) if ($file != '.' and $file != '..')
 	{
 		$ext = strtolower(substr($file, -4));
 		if ($ext == ".jpg" or $ext == ".png")
-			$imageFiles[] = array( "name" => $file, "url" => getPreview("$realDir/$file"), "link" => dirname($scriptUrlPath)."/view/$shortPath/$file" );
+			$imageFiles[] = array( "name" => $file, "url" => getPreview("$realDir/$file"), "link" => dirname($scriptUrlPath)."/view$shortPath/$file" );
 		else
 			$otherFiles[] = array( "name" => $file, "link" => dirname($scriptUrlPath)."/$realDir/$file" );
 	}
