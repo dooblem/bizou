@@ -66,6 +66,8 @@ if (! isset($_SERVER["PATH_INFO"])) {
 
 $shortPath = $_SERVER["PATH_INFO"];
 if ($shortPath == '/') $shortPath = '';
+// extra security check to avoid /photos/index/../.. like urls, maybe useless but..
+if (strpos($shortPath, '..') !== false) die(".. found in url");
 
 $folders = array();
 $imageFiles = array();
