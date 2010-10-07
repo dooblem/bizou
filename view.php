@@ -6,24 +6,27 @@ $scriptPath = $_SERVER["SCRIPT_NAME"];
 $quickDir = dirname($quickPath);
 $realDir = "images$quickDir";
 
+// get all images in an array
+$images = array();
+
 $files = scandir($realDir);
-$size = count($files);
-
-$pos = array_search(basename($quickPath),$files);
-
-$nextImage = '';
-for ($next=$pos+1; $nextImage === '' and $next<$size ; $next++) {
-	$mime = mime_content_type("$realDir/$files[$next]");
-	if ($mime == "image/jpeg")
-		$nextImage = $files[$next];
+foreach ($files as $file) {
+	$ext = strtolower(substr($file, -4));
+	if ($ext == ".jpg" or $ext == ".png")
+		$images[] = $file;
 }
 
+// find the image position
+$pos = array_search(basename($quickPath), $images);
+if ($pos === false) die("Image not found");
+
+// get prev and next images
 $prevImage = '';
-for ($prev=$pos-1; $prevImage === '' and $prev>=0 ; $prev--) {
-	$mime = mime_content_type("$realDir/$files[$prev]");
-	if ($mime == "image/jpeg")
-		$prevImage = $files[$prev];
-}
+$nextImage = '';
+if ($pos > 0)
+	$prevImage = $images[$pos-1];
+if ($pos < sizeof($images))
+	$nextImage = $images[$pos+1];
 
 $imageUrl = dirname($scriptPath)."/images$quickPath";
 
