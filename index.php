@@ -1,6 +1,8 @@
 <?php
 
-function getPreview($imgFile, $maxSize)
+define('THUMB_SIZE', 100);
+
+function getPreview($imgFile, $maxSize = THUMB_SIZE)
 {
 	# example: data/myalbum/100.mypic.jpg
 	$newImgFile = "data/".dirname($imgFile)."/".$maxSize.".".basename($imgFile);
@@ -45,7 +47,7 @@ function getAlbumPreview($dir)
 {
 	foreach (scandir($dir) as $file) if ($file != '.' and $file != '..') {
 		if (strtolower(substr($file, -4)) == ".jpg")
-			return getPreview("$dir/$file", 100);
+			return getPreview("$dir/$file");
 	}
 
 	return '';
@@ -71,7 +73,7 @@ foreach (scandir($realDir) as $file) if ($file != '.' and $file != '..')
 	{
 		$ext = strtolower(substr($file, -4));
 		if ($ext == ".jpg")
-			$imageFiles[] = array( "name" => $file, "url" => getPreview("$realDir/$file", 100), "link" => dirname($scriptUrlPath)."/view/$shortPath/$file" );
+			$imageFiles[] = array( "name" => $file, "url" => getPreview("$realDir/$file"), "link" => dirname($scriptUrlPath)."/view/$shortPath/$file" );
 		else
 			$otherFiles[] = array( "name" => $file, "link" => dirname($scriptUrlPath)."/$realDir/$file" );
 	}
@@ -101,8 +103,8 @@ img {
 }
 
 .image {
-	width: 100px;
-	height: 100px;
+	width: <?php echo THUMB_SIZE ?>px;
+	height: <?php echo THUMB_SIZE ?>px;
 	display: table-cell;
 	text-align: center;
 	vertical-align: middle;
