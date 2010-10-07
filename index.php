@@ -9,7 +9,11 @@ function getPreview($imgFile, $maxSize = THUMB_SIZE)
 	
 	if (! is_file($newImgFile))
 	{
-		$img = imagecreatefromjpeg($imgFile);
+		$ext = strtolower(substr($file, -4));
+		if ($ext == ".jpg")
+			$img = imagecreatefromjpeg($imgFile);
+		else
+			$img = imagecreatefrompng($imgFile);
 
 		$w = imagesx($img);
 		$h = imagesy($img);
@@ -34,7 +38,10 @@ function getPreview($imgFile, $maxSize = THUMB_SIZE)
 
 		imagecopyresampled($newImg, $img, 0, 0, 0, 0, $newW, $newH, $w, $h);
 
-		imagejpeg($newImg, $newImgFile); 
+		if ($ext == ".jpg")
+			imagejpeg($newImg, $newImgFile);
+		else
+			imagepng($newImg, $newImgFile);
 		
 		imagedestroy($img);
 		imagedestroy($newImg);
@@ -46,7 +53,8 @@ function getPreview($imgFile, $maxSize = THUMB_SIZE)
 function getAlbumPreview($dir)
 {
 	foreach (scandir($dir) as $file) if ($file != '.' and $file != '..') {
-		if (strtolower(substr($file, -4)) == ".jpg")
+		$ext = strtolower(substr($file, -4));
+		if ($ext == ".jpg" or $ext == ".png")
 			return getPreview("$dir/$file");
 	}
 
@@ -84,7 +92,7 @@ foreach (scandir($realDir) as $file) if ($file != '.' and $file != '..')
 	else
 	{
 		$ext = strtolower(substr($file, -4));
-		if ($ext == ".jpg")
+		if ($ext == ".jpg" or $ext == ".png")
 			$imageFiles[] = array( "name" => $file, "url" => getPreview("$realDir/$file"), "link" => dirname($scriptUrlPath)."/view/$shortPath/$file" );
 		else
 			$otherFiles[] = array( "name" => $file, "link" => dirname($scriptUrlPath)."/$realDir/$file" );
