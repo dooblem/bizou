@@ -103,21 +103,36 @@ header('Expires: '.gmdate('D, d M Y H:i:s \G\M\T', time() + 3600));
 <html>
 <head>
 <style type="text/css">
+body {
+	padding-top: 2em;
+}
 img {
 	border: 0;
-	vertical-align: middle;
 }
-
+a {
+	text-decoration: none;
+}
 .square {
 	display: inline-block;
 }
-
 .image {
 	width: <?php echo THUMB_SIZE ?>px;
 	height: <?php echo THUMB_SIZE ?>px;
 	display: table-cell;
 	text-align: center;
 	vertical-align: middle;
+}
+.foldername {
+	height: <?php echo THUMB_SIZE ?>px;
+	display: table-cell;
+	vertical-align: middle;
+}
+#parentfolder {
+	position: fixed;
+	font-size: 4em;
+	font-weight: bold;
+	top: 0;
+	left: 0;
 }
 </style>
 </head>
@@ -129,12 +144,12 @@ img {
 
 <?php foreach($folders as $folder) { ?>
 	<div class="folder">
-	<a href="<?php echo $folder["link"] ?>">
-	<?php if ($folder["preview"] !== "") { ?>
-		<img src="<?php echo $folder["preview"] ?>" />
+	<?php if ($folder["preview"] === "") { ?>
+		<a href="<?php echo $folder["link"] ?>"><?php echo $folder["name"] ?></a>
+	<?php } else { ?>
+		<div class="square"><div class="image"><a href="<?php echo $folder["link"] ?>"><img src="<?php echo $folder["preview"] ?>" /></a></div></div>
+		<div class="square"><div class="foldername"><a href="<?php echo $folder["link"] ?>"><?php echo $folder["name"] ?></a></div></div>
 	<?php } ?>
-	<?php echo $folder["name"] ?>
-	</a>
 	</div>
 <?php } ?>
 
