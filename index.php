@@ -82,6 +82,7 @@ $shortPath = isset($_SERVER["PATH_INFO"]) ? $_SERVER["PATH_INFO"] : "";
 if ($shortPath == '/') $shortPath = '';
 $scriptUrlPath = substr($_SERVER["SCRIPT_NAME"], 0, -4); // trim .php
 
+$folders = array();
 $imageFiles = array();
 $otherFiles = array();
 
@@ -95,35 +96,39 @@ foreach (scandir($realDir) as $file) if ($file != '.')
 	}
 	elseif (is_dir("$realDir/$file"))
 	{
-		echo "<div>";
-		$preview = getAlbumPreview("$realDir/$file");
-		if ($preview !== '') {
-			echo "<img src=\"$preview\" /> ";
-		}
-
-		echo "<a href=\"$scriptUrlPath$shortPath/$file\">$file</a>";
-		echo "</div>\n";
+		$folders[] = array( "name" => $file, "link" => "$scriptUrlPath$shortPath/$file", "preview" => getAlbumPreview("$realDir/$file") );
 	}
 	else
 	{
 		$mime = mime_content_type("$realDir/$file");
 
 		if ($mime == "image/jpeg")
-			$imageFiles[] = $file;
+			$imageFiles[] = array( "name" => $file, "url" => getPreview("$realDir/$file", 100), "link" => dirname($scriptUrlPath)."/view/$shortPath/$file" );
 		else
-			$otherFiles[] = $file;
+			$otherFiles[] = array( "name" => $file, "link" => dirname($scriptUrlPath)."/$realDir/$file" );
 	}
 }
 
-foreach ($imageFiles as $file) {
-	echo "<div class=\"square\"><div class=\"image\"><a href=\"".dirname($scriptUrlPath)."/view/$shortPath/$file\"><img src=\"".getPreview("$realDir/$file", 100)."\" /></a></div></div>\n";
-}
-
-foreach ($otherFiles as $file) {
-	echo "<div><a href=\"".dirname($scriptUrlPath)."/$realDir/$file\">$file</a></div>\n";
-}
-
 ?>
+
+<?php foreach($folders as $folder) { ?>
+	<div class="folder">
+	<a href="<?php echo $folder["link"] ?>">
+	<?php if ($folder["preview"] !== "") { ?>
+		<img src="<?php echo $folder["preview"] ?>" />
+	<?php } ?>
+	<?php echo $folder["name"] ?>
+	</a>
+	</div>
+<?php } ?>
+
+<?php foreach ($imageFiles as $file) { ?>
+	<div class="square"><div class="image"><a href="<?php echo $file["link"] ?>"><img src="<?php echo $file["url"] ?>" alt="<?php echo $file["name"] ?>" /></a></div></div>
+<?php } ?>
+
+<?php foreach ($otherFiles as $file) { ?>
+	<div class="miscfile"><a href="<?php echo $file["link"] ?>"><?php echo $file["name"] ?></a></div>
+<?php } ?>
 
 </body>
 </html>
