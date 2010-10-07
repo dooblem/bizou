@@ -1,15 +1,16 @@
 <?php
 
-$quickPath = isset($_SERVER["PATH_INFO"])?$_SERVER["PATH_INFO"]:"";
-$scriptPath = $_SERVER["SCRIPT_NAME"];
+$shortPath = $_SERVER["PATH_INFO"];
+if ($shortPath == '/') $shortPath = '';
+// extra security check to avoid /photos/index/../.. like urls, maybe useless but..
+if (strpos($shortPath, '..') !== false) die(".. found in url");
 
-$quickDir = dirname($quickPath);
-$realDir = "images$quickDir";
+$scriptPath = $_SERVER["SCRIPT_NAME"];
 
 // get all images in an array
 $images = array();
 
-$files = scandir($realDir);
+$files = scandir("images".dirname($shortPath));
 foreach ($files as $file) {
 	$ext = strtolower(substr($file, -4));
 	if ($ext == ".jpg" or $ext == ".png")
@@ -17,7 +18,7 @@ foreach ($files as $file) {
 }
 
 // find the image position
-$pos = array_search(basename($quickPath), $images);
+$pos = array_search(basename($shortPath), $images);
 if ($pos === false) die("Image not found");
 
 // get prev and next images
@@ -28,19 +29,20 @@ if ($pos > 0)
 if ($pos < sizeof($images))
 	$nextImage = $images[$pos+1];
 
-$imageUrl = dirname($scriptPath)."/images$quickPath";
+// template variables
+$imageUrl = dirname($scriptPath)."/images$shortPath";
 
 if ($nextImage === '') {
 	$nextImageUrl = '';
 	$nextPageUrl = '';
 } else {
-	$nextImageUrl = dirname($scriptPath)."/images".dirname($quickPath)."/$nextImage";
+	$nextImageUrl = dirname($scriptPath)."/images".dirname($shortPath)."/$nextImage";
 	$nextPageUrl = dirname($_SERVER["REQUEST_URI"])."/$nextImage";
 }
 if ($prevImage === '') $prevPageUrl = '';
 else $prevPageUrl = dirname($_SERVER["REQUEST_URI"])."/$prevImage";
 
-$directoryUrl = dirname($_SERVER["SCRIPT_NAME"])."/index".dirname($quickPath);
+$directoryUrl = dirname($_SERVER["SCRIPT_NAME"])."/index".dirname($shortPath);
 
 header('Content-Type: text/html; charset=utf-8');
 header('Expires: '.gmdate('D, d M Y H:i:s \G\M\T', time() + 3600));
@@ -112,7 +114,7 @@ img {
 
 <?php if ($prevPageUrl !== '') { ?>
 <div id="previous">
-<a href="<?php echo $nextPageUrl ?>" title="Previous image">&lt;</a>
+<a href="<?php echo $prevPageUrl ?>" title="Previous image">&lt;</a>
 </div>
 <?php } ?>
 
