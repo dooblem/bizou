@@ -1,31 +1,4 @@
 <?php
-header('Content-Type: text/html; charset=utf-8');
-header('Expires: '.gmdate('D, d M Y H:i:s \G\M\T', time() + 3600));
-?>
-<html>
-<head>
-<style type="text/css">
-img {
-	border: 0;
-	vertical-align: middle;
-}
-
-.square {
-	display: inline-block;
-}
-
-.image {
-	width: 100px;
-	height: 100px;
-	display: table-cell;
-	text-align: center;
-	vertical-align: middle;
-}
-</style>
-</head>
-<body>
-
-<?php
 
 function getPreview($imgFile, $maxSize)
 {
@@ -110,6 +83,33 @@ else
 	$parentLink = "";
 
 ?>
+<?php
+///// template starts here /////
+header('Content-Type: text/html; charset=utf-8');
+header('Expires: '.gmdate('D, d M Y H:i:s \G\M\T', time() + 3600));
+?>
+<html>
+<head>
+<style type="text/css">
+img {
+	border: 0;
+	vertical-align: middle;
+}
+
+.square {
+	display: inline-block;
+}
+
+.image {
+	width: 100px;
+	height: 100px;
+	display: table-cell;
+	text-align: center;
+	vertical-align: middle;
+}
+</style>
+</head>
+<body>
 
 <?php if ($parentLink !== '') { ?>
 	<div id="parentfolder"><a href="<?php echo $parentLink ?>">^</a></div>
