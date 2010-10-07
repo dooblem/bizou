@@ -90,11 +90,7 @@ $realDir = "images$shortPath";
 
 foreach (scandir($realDir) as $file) if ($file != '.' and $file != '..')
 {
-	if ($file == '..')
-	{
-		echo "<div><a href=\"$scriptUrlPath".dirname($shortPath)."/\">..</a></div>\n";
-	}
-	elseif (is_dir("$realDir/$file"))
+	if (is_dir("$realDir/$file"))
 	{
 		$folders[] = array( "name" => $file, "link" => "$scriptUrlPath$shortPath/$file", "preview" => getAlbumPreview("$realDir/$file") );
 	}
@@ -116,7 +112,7 @@ else
 ?>
 
 <?php if ($parentLink !== '') { ?>
-	<div><a href="<?php echo $parentLink ?>">^</a></div>
+	<div id="parentfolder"><a href="<?php echo $parentLink ?>">^</a></div>
 <?php } ?>
 
 <?php foreach($folders as $folder) { ?>
