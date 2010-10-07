@@ -71,7 +71,7 @@ function getPreview($imgFile, $maxSize)
 function getAlbumPreview($dir)
 {
 	foreach (scandir($dir) as $file) if ($file != '.' and $file != '..') {
-		if (mime_content_type("$dir/$file") == "image/jpeg")
+		if (strtolower(substr($file, -4)) == ".jpg")
 			return getPreview("$dir/$file", 100);
 	}
 
@@ -88,7 +88,7 @@ $otherFiles = array();
 
 $realDir = "images$shortPath";
 
-foreach (scandir($realDir) as $file) if ($file != '.')
+foreach (scandir($realDir) as $file) if ($file != '.' and $file != '..')
 {
 	if ($file == '..')
 	{
@@ -100,16 +100,24 @@ foreach (scandir($realDir) as $file) if ($file != '.')
 	}
 	else
 	{
-		$mime = mime_content_type("$realDir/$file");
-
-		if ($mime == "image/jpeg")
+		$ext = strtolower(substr($file, -4));
+		if ($ext == ".jpg")
 			$imageFiles[] = array( "name" => $file, "url" => getPreview("$realDir/$file", 100), "link" => dirname($scriptUrlPath)."/view/$shortPath/$file" );
 		else
 			$otherFiles[] = array( "name" => $file, "link" => dirname($scriptUrlPath)."/$realDir/$file" );
 	}
 }
 
+if (dirname($shortPath) !== '')
+	$parentLink = $scriptUrlPath.dirname($shortPath);
+else
+	$parentLink = "";
+
 ?>
+
+<?php if ($parentLink !== '') { ?>
+	<div><a href="<?php echo $parentLink ?>">^</a></div>
+<?php } ?>
 
 <?php foreach($folders as $folder) { ?>
 	<div class="folder">
