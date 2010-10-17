@@ -9,7 +9,7 @@ function getPreview($imgFile, $maxSize = THUMB_SIZE)
 	
 	if (! is_file($newImgFile))
 	{
-		$ext = strtolower(substr($file, -4));
+		$ext = strtolower(substr($imgFile, -4));
 		if ($ext == ".jpg")
 			$img = imagecreatefromjpeg($imgFile);
 		else
