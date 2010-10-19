@@ -61,7 +61,7 @@ function getAlbumPreview($dir)
 	return '';
 }
 
-$scriptUrlPath = substr($_SERVER["SCRIPT_NAME"], 0, -4); // trim .php
+$scriptUrlPath = $_SERVER["SCRIPT_NAME"];
 
 // if url == http://localhost/photos/index/toto/titi, path_info == /toto/titi
 // if url == http://localhost/photos/index, path_info is not set
@@ -93,7 +93,7 @@ foreach (scandir($realDir) as $file) if ($file != '.' and $file != '..')
 	{
 		$ext = strtolower(substr($file, -4));
 		if ($ext == ".jpg" or $ext == ".png")
-			$imageFiles[] = array( "name" => $file, "url" => getPreview("$realDir/$file"), "link" => dirname($scriptUrlPath)."/view$shortPath/$file" );
+			$imageFiles[] = array( "name" => $file, "url" => getPreview("$realDir/$file"), "link" => dirname($scriptUrlPath)."/view.php$shortPath/$file" );
 		else
 			$otherFiles[] = array( "name" => $file, "link" => dirname($scriptUrlPath)."/$realDir/$file" );
 	}

@@ -42,7 +42,7 @@ if ($nextImage === '') {
 if ($prevImage === '') $prevPageUrl = '';
 else $prevPageUrl = dirname($_SERVER["REQUEST_URI"])."/$prevImage";
 
-$directoryUrl = dirname($_SERVER["SCRIPT_NAME"])."/index".dirname($shortPath);
+$directoryUrl = dirname($_SERVER["SCRIPT_NAME"])."/index.php".dirname($shortPath);
 
 header('Content-Type: text/html; charset=utf-8');
 header('Expires: '.gmdate('D, d M Y H:i:s \G\M\T', time() + 3600));
