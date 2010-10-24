@@ -3,6 +3,7 @@
 define('THUMB_SIZE', 100);
 define('DATA_DIR', 'data');
 define('IMAGES_DIR', 'images');
+define('USE_VIEWER', true);
 
 function getPreview($imgFile, $maxSize = THUMB_SIZE)
 {
@@ -94,10 +95,17 @@ foreach (scandir($realDir) as $file) if ($file != '.' and $file != '..')
 	else
 	{
 		$ext = strtolower(substr($file, -4));
-		if ($ext == ".jpg" or $ext == ".png")
-			$imageFiles[] = array( "name" => $file, "url" => getPreview("$realDir/$file"), "link" => dirname($scriptUrlPath)."/view.php$shortPath/$file" );
-		else
+		if ($ext == ".jpg" or $ext == ".png") {
+			if (USE_VIEWER)
+				$link = dirname($scriptUrlPath)."/view.php$shortPath/$file";
+			else
+				$link = dirname($scriptUrlPath)."/$realDir/$file";
+
+			$imageFiles[] = array( "name" => $file, "url" => getPreview("$realDir/$file"), "link" => $link );
+
+		} else {
 			$otherFiles[] = array( "name" => $file, "link" => dirname($scriptUrlPath)."/$realDir/$file" );
+		}
 	}
 }
 
