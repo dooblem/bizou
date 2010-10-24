@@ -20,7 +20,7 @@
 define('THUMB_SIZE', 100);
 define('DATA_DIR', 'data');
 define('IMAGES_DIR', 'images');
-define('USE_VIEWER', true);
+define('USE_VIEWER', true); # if set to false, you can delete view.php
 
 function getPreview($imgFile, $maxSize = THUMB_SIZE)
 {
