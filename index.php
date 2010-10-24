@@ -1,11 +1,13 @@
 <?php
 
 define('THUMB_SIZE', 100);
+define('DATA_DIR', 'data');
+define('IMAGES_DIR', 'images');
 
 function getPreview($imgFile, $maxSize = THUMB_SIZE)
 {
 	# example: data/myalbum/100.mypic.jpg
-	$newImgFile = "data/".dirname($imgFile)."/".$maxSize.".".basename($imgFile);
+	$newImgFile = DATA_DIR."/".dirname($imgFile)."/".$maxSize.".".basename($imgFile);
 	
 	if (! is_file($newImgFile))
 	{
@@ -81,7 +83,7 @@ $folders = array();
 $imageFiles = array();
 $otherFiles = array();
 
-$realDir = "images$shortPath";
+$realDir = IMAGES_DIR.$shortPath;
 
 foreach (scandir($realDir) as $file) if ($file != '.' and $file != '..')
 {

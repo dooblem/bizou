@@ -1,5 +1,7 @@
 <?php
 
+define('IMAGES_DIR', 'images');
+
 $shortPath = $_SERVER["PATH_INFO"];
 if ($shortPath == '/') $shortPath = '';
 // extra security check to avoid /photos/index/../.. like urls, maybe useless but..
@@ -10,7 +12,7 @@ $scriptPath = $_SERVER["SCRIPT_NAME"];
 // get all images in an array
 $images = array();
 
-$files = scandir("images".dirname($shortPath));
+$files = scandir(IMAGES_DIR.dirname($shortPath));
 foreach ($files as $file) {
 	$ext = strtolower(substr($file, -4));
 	if ($ext == ".jpg" or $ext == ".png")
@@ -30,13 +32,13 @@ if ($pos < sizeof($images)-1)
 	$nextImage = $images[$pos+1];
 
 // template variables
-$imageUrl = dirname($scriptPath)."/images$shortPath";
+$imageUrl = dirname($scriptPath)."/".IMAGES_DIR.$shortPath;
 
 if ($nextImage === '') {
 	$nextImageUrl = '';
 	$nextPageUrl = '';
 } else {
-	$nextImageUrl = dirname($scriptPath)."/images".dirname($shortPath)."/$nextImage";
+	$nextImageUrl = dirname($scriptPath)."/".IMAGES_DIR.dirname($shortPath)."/$nextImage";
 	$nextPageUrl = dirname($_SERVER["REQUEST_URI"])."/$nextImage";
 }
 if ($prevImage === '') $prevPageUrl = '';
