@@ -112,8 +112,21 @@ img {
 </style>
 
 <?php if ($nextImageUrl !== '') { ?>
+ <?php if (strpos($_SERVER['HTTP_USER_AGENT'], 'Firefox') !== false) { ?>
 <link rel="prefetch" href="<?php echo $nextImageUrl ?>" />
 <link rel="prefetch" href="<?php echo $nextPageUrl ?>" />
+
+ <?php } else { ?>
+<script type="text/javascript">
+window.onload = function() {
+	var im = new Image();
+	im.src = '<?php echo $nextImageUrl ?>';
+	var req = new XMLHttpRequest();
+	req.open('GET', '<?php echo $nextPageUrl ?>', false);
+	req.send(null);
+};
+</script>
+ <?php } ?>
 <?php } ?>
 
 </head>
