@@ -103,6 +103,11 @@ $otherFiles = array();
 
 $realDir = IMAGES_DIR.$shortPath;
 
+if (! is_dir($realDir)) {
+	header("HTTP/1.1 404 Not Found");
+	die("Directory Not Found");
+}
+
 foreach (scandir($realDir) as $file) if ($file != '.' and $file != '..')
 {
 	if (is_dir("$realDir/$file"))

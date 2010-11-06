@@ -24,6 +24,11 @@ if ($shortPath == '/') $shortPath = '';
 // extra security check to avoid /photos/index/../.. like urls, maybe useless but..
 if (strpos($shortPath, '..') !== false) die(".. found in url");
 
+if (! is_file(IMAGES_DIR.$shortPath)) {
+	header("HTTP/1.1 404 Not Found");
+	die("File Not Found");
+}
+
 $scriptPath = $_SERVER["SCRIPT_NAME"];
 
 // get all images in an array
