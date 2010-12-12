@@ -19,6 +19,19 @@
 
 require 'config.php';
 
+// load plugins
+$plugins = scandir("plugins");
+array_shift($plugins); array_shift($plugins); // remove . and ..
+foreach ($plugins as $p) if (is_file("plugins/$p/functions.php"))
+	require "plugins/$p/functions.php";
+
+if (! function_exists('getThumbTarget')) {
+function getThumbTarget($imageSimplePath)
+{
+	return dirname($_SERVER["SCRIPT_NAME"]).'/'.IMAGES_DIR.$imageSimplePath;
+}
+}
+
 function getPreview($imgFile, $maxSize = THUMB_SIZE)
 {
 	# example: data/myalbum/100.mypic.jpg
@@ -120,6 +133,7 @@ foreach (scandir($realDir) as $file) if ($file != '.' and $file != '..')
 		$ext = strtolower(substr($file, -4));
 		if ($ext == ".jpg" or $ext == ".png") {
 				$link = dirname($scriptUrlPath)."/$realDir/$file";
+				$link = getThumbTarget("$shortPath/$file");
 
 			$imageFiles[] = array( "name" => $file, "url" => getPreview("$realDir/$file"), "link" => $link );
 
