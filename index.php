@@ -119,9 +119,6 @@ foreach (scandir($realDir) as $file) if ($file != '.' and $file != '..')
 	{
 		$ext = strtolower(substr($file, -4));
 		if ($ext == ".jpg" or $ext == ".png") {
-			if (USE_VIEWER)
-				$link = dirname($scriptUrlPath)."/view.php$shortPath/$file";
-			else
 				$link = dirname($scriptUrlPath)."/$realDir/$file";
 
 			$imageFiles[] = array( "name" => $file, "url" => getPreview("$realDir/$file"), "link" => $link );
