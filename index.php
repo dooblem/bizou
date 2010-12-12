@@ -80,15 +80,17 @@ function getAlbumPreview($dir)
 
 $scriptUrlPath = $_SERVER["SCRIPT_NAME"];
 
-// if url == http://localhost/photos/index/toto/titi, path_info == /toto/titi
-// if url == http://localhost/photos/index, path_info is not set
+// if url == http://localhost/photos/index.php/toto/titi, path_info == /toto/titi
+// if url == http://localhost/photos/index.php, path_info is not set
 // if url == http://localhost/photos/, path_info is not set
-// if path_info is not set, we are at top level, so we redirect to /photos/index/
+// if path_info is not set, we are at top level, so we redirect to /photos/index.php/
 if (! isset($_SERVER["PATH_INFO"])) {
 	header("Location: $scriptUrlPath/");
 	exit();
 }
 
+# shortPath is the simple path to the image
+# /index.php/toto/titi => shortPath == /toto/titi
 $shortPath = $_SERVER["PATH_INFO"];
 if ($shortPath == '/') $shortPath = '';
 // extra security check to avoid /photos/index/../.. like urls, maybe useless but..
@@ -98,6 +100,8 @@ $folders = array();
 $imageFiles = array();
 $otherFiles = array();
 
+# realDir is the directory in filesystem
+# seen from current script directory
 $realDir = IMAGES_DIR.$shortPath;
 
 if (! is_dir($realDir)) {
