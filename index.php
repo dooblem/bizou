@@ -189,6 +189,9 @@ a {
 	left: 0;
 }
 </style>
+<?php foreach ($plugins as $p) if (is_file("plugins/$p/style.css")) { ?>
+	<link rel="stylesheet" type="text/css" href="<?php echo dirname($scriptUrlPath)."/plugins/$p/style.css" ?>" />
+<?php } ?>
 </head>
 <body>
 
