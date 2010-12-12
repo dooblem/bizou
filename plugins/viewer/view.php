@@ -17,14 +17,14 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-define('IMAGES_DIR', 'images');
+require '../../config.php';
 
 $shortPath = $_SERVER["PATH_INFO"];
 if ($shortPath == '/') $shortPath = '';
 // extra security check to avoid /photos/index/../.. like urls, maybe useless but..
 if (strpos($shortPath, '..') !== false) die(".. found in url");
 
-if (! is_file(IMAGES_DIR.$shortPath)) {
+if (! is_file('../../'.IMAGES_DIR.$shortPath)) {
 	header("HTTP/1.1 404 Not Found");
 	die("File Not Found");
 }
@@ -34,7 +34,7 @@ $scriptPath = $_SERVER["SCRIPT_NAME"];
 // get all images in an array
 $images = array();
 
-$files = scandir(IMAGES_DIR.dirname($shortPath));
+$files = scandir('../../'.IMAGES_DIR.dirname($shortPath));
 foreach ($files as $file) {
 	$ext = strtolower(substr($file, -4));
 	if ($ext == ".jpg" or $ext == ".png")
@@ -54,7 +54,7 @@ if ($pos < sizeof($images)-1)
 	$nextImage = $images[$pos+1];
 
 // template variables
-$imageUrl = dirname($scriptPath)."/".IMAGES_DIR.$shortPath;
+$imageUrl = dirname($scriptPath)."/../../".IMAGES_DIR.$shortPath;
 
 if ($nextImage === '') {
 	$nextImageUrl = '';
@@ -66,7 +66,7 @@ if ($nextImage === '') {
 if ($prevImage === '') $prevPageUrl = '';
 else $prevPageUrl = dirname($_SERVER["REQUEST_URI"])."/$prevImage";
 
-$directoryUrl = dirname($_SERVER["SCRIPT_NAME"])."/index.php".dirname($shortPath);
+$directoryUrl = dirname($scriptPath)."/../../index.php".dirname($shortPath);
 
 header('Content-Type: text/html; charset=utf-8');
 header('Expires: '.gmdate('D, d M Y H:i:s \G\M\T', time() + 3600));
