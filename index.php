@@ -17,10 +17,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-define('THUMB_SIZE', 100);
-define('DATA_DIR', 'data');
-define('IMAGES_DIR', 'images');
-define('USE_VIEWER', true); # if set to false, you can delete view.php
+require 'config.php';
 
 function getPreview($imgFile, $maxSize = THUMB_SIZE)
 {
