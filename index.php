@@ -31,8 +31,8 @@ function plugins_include($phpFile)
 		require "plugins/$p/$phpFile";
 }
 
-if (! function_exists('getThumbTarget')) {
-function getThumbTarget($imageSimplePath)
+if (! function_exists('getImageLink')) {
+function getImageLink($imageSimplePath)
 {
 	return dirname($_SERVER["SCRIPT_NAME"]).'/'.IMAGES_DIR.$imageSimplePath;
 }
@@ -138,7 +138,7 @@ foreach (scandir($realDir) as $file) if ($file != '.' and $file != '..')
 	{
 		$ext = strtolower(substr($file, -4));
 		if ($ext == ".jpg" or $ext == ".png") {
-			$imageFiles[] = array( "name" => $file, "url" => getPreview("$realDir/$file"), "link" => getThumbTarget("$shortPath/$file") );
+			$imageFiles[] = array( "name" => $file, "url" => getPreview("$realDir/$file"), "link" => getImageLink("$shortPath/$file") );
 		} else {
 			$otherFiles[] = array( "name" => $file, "link" => dirname($scriptUrlPath)."/$realDir/$file" );
 		}
