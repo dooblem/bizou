@@ -17,24 +17,24 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-require '../../config.php';
+$bizouRootFromHere = '../..';
+require "$bizouRootFromHere/config.php";
 
-$simplePath = $_SERVER["PATH_INFO"];
-if ($simplePath == '/') $simplePath = '';
+$simpleImagePath = $_SERVER["PATH_INFO"];
+if ($simpleImagePath == '/') $simpleImagePath = '';
 // extra security check to avoid /photos/index/../.. like urls, maybe useless but..
-if (strpos($simplePath, '..') !== false) die(".. found in url");
+if (strpos($simpleImagePath, '..') !== false) die(".. found in url");
 
-if (! is_file('../../'.IMAGES_DIR.$simplePath)) {
+
+if (! is_file("$bizouRootFromHere/".IMAGES_DIR.$simpleImagePath)) {
 	header("HTTP/1.1 404 Not Found");
 	die("File Not Found");
 }
 
-$scriptPath = $_SERVER["SCRIPT_NAME"];
-
 // get all images in an array
 $images = array();
 
-$files = scandir('../../'.IMAGES_DIR.dirname($simplePath));
+$files = scandir("$bizouRootFromHere/".IMAGES_DIR.dirname($simpleImagePath));
 foreach ($files as $file) {
 	$ext = strtolower(substr($file, -4));
 	if ($ext == ".jpg" or $ext == ".png")
@@ -42,7 +42,7 @@ foreach ($files as $file) {
 }
 
 // find the image position
-$pos = array_search(basename($simplePath), $images);
+$pos = array_search(basename($simpleImagePath), $images);
 if ($pos === false) die("Image not found");
 
 // get prev and next images
@@ -53,20 +53,25 @@ if ($pos > 0)
 if ($pos < sizeof($images)-1)
 	$nextImage = $images[$pos+1];
 
+$scriptUrl = $_SERVER["SCRIPT_NAME"];
+$bizouRootUrl = dirname(dirname(dirname($scriptUrl)));
+// scriptUrl = /path/to/bizou/plugins/viewer/view.php
+// bizouRootUrl = /path/to/bizou
+
 // template variables
-$imageUrl = dirname($scriptPath)."/../../".IMAGES_DIR.$simplePath;
+$imageUrl = "$bizouRootUrl/".IMAGES_DIR.$simpleImagePath;
 
 if ($nextImage === '') {
 	$nextImageUrl = '';
 	$nextPageUrl = '';
 } else {
-	$nextImageUrl = dirname($scriptPath)."/".IMAGES_DIR.dirname($simplePath)."/$nextImage";
+	$nextImageUrl = "$bizouRootUrl/".IMAGES_DIR.dirname($simpleImagePath)."/$nextImage";
 	$nextPageUrl = dirname($_SERVER["REQUEST_URI"])."/$nextImage";
 }
 if ($prevImage === '') $prevPageUrl = '';
 else $prevPageUrl = dirname($_SERVER["REQUEST_URI"])."/$prevImage";
 
-$directoryUrl = dirname($scriptPath)."/../../index.php".dirname($simplePath);
+$directoryUrl = "$bizouRootUrl/index.php".dirname($simpleImagePath);
 
 header('Content-Type: text/html; charset=utf-8');
 header('Expires: '.gmdate('D, d M Y H:i:s \G\M\T', time() + 3600));
