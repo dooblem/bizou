@@ -20,10 +20,13 @@
 require 'config.php';
 
 // load plugins
-$plugins = scandir("plugins");
-array_shift($plugins); array_shift($plugins); // remove . and ..
-foreach ($plugins as $p) if (is_file("plugins/$p/functions.php"))
-	require "plugins/$p/functions.php";
+$plugins = array();
+if (is_dir("plugins")) {
+	$plugins = scandir("plugins");
+	array_shift($plugins); array_shift($plugins); // remove . and ..
+	foreach ($plugins as $p) if (is_file("plugins/$p/functions.php"))
+		require "plugins/$p/functions.php";
+}
 
 function plugins_include($phpFile)
 {
