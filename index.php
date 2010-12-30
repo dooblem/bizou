@@ -108,12 +108,12 @@ if (! isset($_SERVER["PATH_INFO"])) {
 	exit();
 }
 
-# shortPath is the simple path to the image
-# /index.php/toto/titi => shortPath == /toto/titi
-$shortPath = $_SERVER["PATH_INFO"];
-if ($shortPath == '/') $shortPath = '';
+# simplePath is the simple path to the image
+# /index.php/toto/titi => simplePath == /toto/titi
+$simplePath = $_SERVER["PATH_INFO"];
+if ($simplePath == '/') $simplePath = '';
 // extra security check to avoid /photos/index/../.. like urls, maybe useless but..
-if (strpos($shortPath, '..') !== false) die(".. found in url");
+if (strpos($simplePath, '..') !== false) die(".. found in url");
 
 $folders = array();
 $imageFiles = array();
@@ -121,7 +121,7 @@ $otherFiles = array();
 
 # realDir is the directory in filesystem
 # seen from current script directory
-$realDir = IMAGES_DIR.$shortPath;
+$realDir = IMAGES_DIR.$simplePath;
 
 if (! is_dir($realDir)) {
 	header("HTTP/1.1 404 Not Found");
@@ -132,21 +132,21 @@ foreach (scandir($realDir) as $file) if ($file != '.' and $file != '..')
 {
 	if (is_dir("$realDir/$file"))
 	{
-		$folders[] = array( "name" => $file, "link" => "$scriptUrlPath$shortPath/$file", "preview" => getAlbumPreview("$realDir/$file") );
+		$folders[] = array( "name" => $file, "link" => "$scriptUrlPath$simplePath/$file", "preview" => getAlbumPreview("$realDir/$file") );
 	}
 	else
 	{
 		$ext = strtolower(substr($file, -4));
 		if ($ext == ".jpg" or $ext == ".png") {
-			$imageFiles[] = array( "name" => $file, "url" => getPreview("$realDir/$file"), "link" => getImageLink("$shortPath/$file") );
+			$imageFiles[] = array( "name" => $file, "url" => getPreview("$realDir/$file"), "link" => getImageLink("$simplePath/$file") );
 		} else {
 			$otherFiles[] = array( "name" => $file, "link" => dirname($scriptUrlPath)."/$realDir/$file" );
 		}
 	}
 }
 
-if (dirname($shortPath) !== '')
-	$parentLink = $scriptUrlPath.dirname($shortPath);
+if (dirname($simplePath) !== '')
+	$parentLink = $scriptUrlPath.dirname($simplePath);
 else
 	$parentLink = "";
 
