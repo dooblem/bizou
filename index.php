@@ -138,11 +138,7 @@ foreach (scandir($realDir) as $file) if ($file != '.' and $file != '..')
 	{
 		$ext = strtolower(substr($file, -4));
 		if ($ext == ".jpg" or $ext == ".png") {
-				$link = dirname($scriptUrlPath)."/$realDir/$file";
-				$link = getThumbTarget("$shortPath/$file");
-
-			$imageFiles[] = array( "name" => $file, "url" => getPreview("$realDir/$file"), "link" => $link );
-
+			$imageFiles[] = array( "name" => $file, "url" => getPreview("$realDir/$file"), "link" => getThumbTarget("$shortPath/$file") );
 		} else {
 			$otherFiles[] = array( "name" => $file, "link" => dirname($scriptUrlPath)."/$realDir/$file" );
 		}
