@@ -97,14 +97,17 @@ function getAlbumPreview($dir)
 	return '';
 }
 
-$scriptUrlPath = $_SERVER["SCRIPT_NAME"];
+$scriptUrl = $_SERVER["SCRIPT_NAME"];
+$rootUrl = dirname($scriptUrl);
+// $scriptUrl =  "/path/to/bizou/index.php"
+// $rootUrl =  "/path/to/bizou"
 
 // if url == http://localhost/photos/index.php/toto/titi, path_info == /toto/titi
 // if url == http://localhost/photos/index.php, path_info is not set
 // if url == http://localhost/photos/, path_info is not set
 // if path_info is not set, we are at top level, so we redirect to /photos/index.php/
 if (! isset($_SERVER["PATH_INFO"])) {
-	header("Location: $scriptUrlPath/");
+	header("Location: $scriptUrl/");
 	exit();
 }
 
@@ -132,7 +135,7 @@ foreach (scandir($realDir) as $file) if ($file != '.' and $file != '..')
 {
 	if (is_dir("$realDir/$file"))
 	{
-		$folders[] = array( "name" => $file, "link" => "$scriptUrlPath$simplePath/$file", "preview" => getAlbumPreview("$realDir/$file") );
+		$folders[] = array( "name" => $file, "link" => "$scriptUrl$simplePath/$file", "preview" => getAlbumPreview("$realDir/$file") );
 	}
 	else
 	{
@@ -140,13 +143,13 @@ foreach (scandir($realDir) as $file) if ($file != '.' and $file != '..')
 		if ($ext == ".jpg" or $ext == ".png") {
 			$imageFiles[] = array( "name" => $file, "url" => getPreview("$realDir/$file"), "link" => getImageLink("$simplePath/$file") );
 		} else {
-			$otherFiles[] = array( "name" => $file, "link" => dirname($scriptUrlPath)."/$realDir/$file" );
+			$otherFiles[] = array( "name" => $file, "link" => "$rootUrl/$realDir/$file" );
 		}
 	}
 }
 
 if (dirname($simplePath) !== '')
-	$parentLink = $scriptUrlPath.dirname($simplePath);
+	$parentLink = $scriptUrl.dirname($simplePath);
 else
 	$parentLink = "";
 
@@ -192,7 +195,7 @@ a {
 }
 </style>
 <?php foreach ($plugins as $p) if (is_file("plugins/$p/style.css")) { ?>
-	<link rel="stylesheet" type="text/css" href="<?php echo dirname($scriptUrlPath)."/plugins/$p/style.css" ?>" />
+	<link rel="stylesheet" type="text/css" href="<?php echo "$rootUrl/plugins/$p/style.css" ?>" />
 <?php } ?>
 </head>
 <body>
