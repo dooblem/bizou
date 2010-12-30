@@ -25,6 +25,12 @@ array_shift($plugins); array_shift($plugins); // remove . and ..
 foreach ($plugins as $p) if (is_file("plugins/$p/functions.php"))
 	require "plugins/$p/functions.php";
 
+function plugins_include($phpFile)
+{
+	foreach ($GLOBALS['plugins'] as $p) if (is_file("plugins/$p/$phpFile"))
+		require "plugins/$p/$phpFile";
+}
+
 if (! function_exists('getThumbTarget')) {
 function getThumbTarget($imageSimplePath)
 {
@@ -198,6 +204,8 @@ a {
 <?php if ($parentLink !== '') { ?>
 	<div id="parentfolder"><a href="<?php echo $parentLink ?>">^</a></div>
 <?php } ?>
+
+<?php plugins_include("before_content.php") ?>
 
 <?php foreach($folders as $folder) { ?>
 	<div class="folder">
