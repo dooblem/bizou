@@ -166,7 +166,8 @@ header('Expires: '.gmdate('D, d M Y H:i:s \G\M\T', time() + 3600));
 <head>
 <style type="text/css">
 body {
-	padding-top: 2em;
+	margin-top: 0;
+	font-family: sans-serif;
 }
 img {
 	border: 0;
@@ -177,24 +178,24 @@ a {
 .square {
 	display: inline-block;
 }
-.image {
-	width: <?php echo THUMB_SIZE ?>px;
-	height: <?php echo THUMB_SIZE ?>px;
+.image, .foldername, .image_nopreview, .foldername_nopreview {
 	display: table-cell;
-	text-align: center;
 	vertical-align: middle;
 }
-.foldername {
+.image, .image_nopreview {
+	width: <?php echo THUMB_SIZE ?>px;
+	text-align: center;
+}
+.image, .foldername {
 	height: <?php echo THUMB_SIZE ?>px;
-	display: table-cell;
-	vertical-align: middle;
+}
+.foldername, .foldername_nopreview {
+	padding-left: 1ex;
 }
 #parentfolder {
-	position: fixed;
 	font-size: 4em;
 	font-weight: bold;
-	top: 0;
-	left: 0;
+	height: 0.6em;
 }
 </style>
 <?php foreach ($plugins as $p) if (is_file("plugins/$p/style.css")) { ?>
@@ -203,19 +204,22 @@ a {
 </head>
 <body>
 
+<div id="parentfolder"><a href="<?php echo $parentLink ?>">
 <?php if ($parentLink !== '') { ?>
-	<div id="parentfolder"><a href="<?php echo $parentLink ?>">^</a></div>
+^
 <?php } ?>
+&nbsp;</a></div>
 
 <?php plugins_include("before_content.php") ?>
 
 <?php foreach($folders as $folder) { ?>
 	<div class="folder">
 	<?php if ($folder["preview"] === "") { ?>
-		<a href="<?php echo $folder["link"] ?>"><?php echo $folder["name"] ?></a>
+		<div class="square"><div class="image_nopreview"> - </div></div>
+		<div class="square"><div class="foldername_nopreview"> <a href="<?php echo $folder["link"] ?>"><?php echo $folder["name"] ?></a> </div></div>
 	<?php } else { ?>
-		<div class="square"><div class="image"><a href="<?php echo $folder["link"] ?>"><img src="<?php echo $folder["preview"] ?>" /></a></div></div>
-		<div class="square"><div class="foldername"><a href="<?php echo $folder["link"] ?>"><?php echo $folder["name"] ?></a></div></div>
+		<div class="square"><div class="image"> <a href="<?php echo $folder["link"] ?>"><img src="<?php echo $folder["preview"] ?>" /></a> </div></div>
+		<div class="square"><div class="foldername"> <a href="<?php echo $folder["link"] ?>"><?php echo $folder["name"] ?></a> </div></div>
 	<?php } ?>
 	</div>
 <?php } ?>
