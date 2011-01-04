@@ -160,5 +160,31 @@ window.onload = function() {
 </div>
 <?php } ?>
 
+<script language="javascript">
+// keyboard navigation
+function keyup(e)
+{
+	switch (e.keyCode) {
+		case 37: // left
+			window.location = "<?php echo $prevPageUrl ?>";
+		break;
+		case 39: // right
+		case 32: // space
+			window.location = "<?php echo $nextPageUrl ?>";
+		break;
+		case 38: // up  (down is 40)
+			window.location = "<?php echo $directoryUrl ?>";
+		break;
+		case 13: // enter
+			window.location = "<?php echo $imageUrl ?>";
+		break;
+	}
+}
+
+if (document.addEventListener) {
+        document.addEventListener("keyup", keyup, false);
+}
+</script>
+
 </body>
 </html>
