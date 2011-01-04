@@ -73,6 +73,8 @@ else $prevPageUrl = dirname($_SERVER["REQUEST_URI"])."/$prevImage";
 
 $directoryUrl = "$bizouRootUrl/index.php".dirname($simpleImagePath);
 
+$firefox = strpos($_SERVER['HTTP_USER_AGENT'], 'Firefox') !== false;
+
 header('Content-Type: text/html; charset=utf-8');
 header('Expires: '.gmdate('D, d M Y H:i:s \G\M\T', time() + 3600));
 ?>
@@ -121,22 +123,9 @@ img {
 }
 </style>
 
-<?php if ($nextImageUrl !== '') { ?>
- <?php if (strpos($_SERVER['HTTP_USER_AGENT'], 'Firefox') !== false) { ?>
+<?php if ($nextImageUrl !== '' and $firefox) { ?>
 <link rel="prefetch" href="<?php echo $nextImageUrl ?>" />
 <link rel="prefetch" href="<?php echo $nextPageUrl ?>" />
-
- <?php } else { ?>
-<script type="text/javascript">
-window.onload = function() {
-	var im = new Image();
-	im.src = '<?php echo $nextImageUrl ?>';
-	var req = new XMLHttpRequest();
-	req.open('GET', '<?php echo $nextPageUrl ?>', false);
-	req.send(null);
-};
-</script>
- <?php } ?>
 <?php } ?>
 
 </head>
@@ -160,7 +149,18 @@ window.onload = function() {
 </div>
 <?php } ?>
 
-<script language="javascript">
+<script type="text/javascript">
+
+<?php if ($nextImageUrl !== '' and ! $firefox) { ?>
+window.onload = function() { // for browsers not supporting link rel=prefetch
+	var im = new Image();
+	im.src = '<?php echo $nextImageUrl ?>';
+	var req = new XMLHttpRequest();
+	req.open('GET', '<?php echo $nextPageUrl ?>', false);
+	req.send(null);
+};
+<?php } ?>
+
 // keyboard navigation
 function keyup(e)
 {
