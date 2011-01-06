@@ -80,6 +80,7 @@ header('Expires: '.gmdate('D, d M Y H:i:s \G\M\T', time() + 3600));
 ?>
 <html>
 <head>
+<title> <?php echo IMAGES_DIR.$simpleImagePath ?> </title>
 <style type="text/css">
 html, body {
 height: 100%;
