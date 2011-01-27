@@ -55,23 +55,24 @@ if ($pos < sizeof($images)-1)
 
 $scriptUrl = $_SERVER["SCRIPT_NAME"];
 $bizouRootUrl = dirname(dirname(dirname($scriptUrl)));
+if (substr($bizouRootUrl, -1) !== '/') $bizouRootUrl.='/';  // add a trailing / to rootUrl
 // scriptUrl = /path/to/bizou/plugins/viewer/view.php
-// bizouRootUrl = /path/to/bizou
+// bizouRootUrl = /path/to/bizou/
 
 // template variables
-$imageUrl = "$bizouRootUrl/".IMAGES_DIR.$simpleImagePath;
+$imageUrl = $bizouRootUrl.IMAGES_DIR.$simpleImagePath;
 
 if ($nextImage === '') {
 	$nextImageUrl = '';
 	$nextPageUrl = '';
 } else {
-	$nextImageUrl = "$bizouRootUrl/".IMAGES_DIR.dirname($simpleImagePath)."/$nextImage";
+	$nextImageUrl = $bizouRootUrl.IMAGES_DIR.dirname($simpleImagePath)."/$nextImage";
 	$nextPageUrl = dirname($_SERVER["REQUEST_URI"])."/$nextImage";
 }
 if ($prevImage === '') $prevPageUrl = '';
 else $prevPageUrl = dirname($_SERVER["REQUEST_URI"])."/$prevImage";
 
-$directoryUrl = "$bizouRootUrl/index.php".dirname($simpleImagePath);
+$directoryUrl = $bizouRootUrl."index.php".dirname($simpleImagePath);
 
 $firefox = strpos($_SERVER['HTTP_USER_AGENT'], 'Firefox') !== false;
 

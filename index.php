@@ -19,6 +19,13 @@
 
 require 'config.php';
 
+// global variables, globals should remain contant
+$scriptUrl = $_SERVER["SCRIPT_NAME"];
+$rootUrl = dirname($scriptUrl);
+if (substr($rootUrl, -1) !== '/') $rootUrl.='/';  // add a trailing / to rootUrl
+// $scriptUrl =  "/path/to/bizou/index.php"
+// $rootUrl =  "/path/to/bizou/"
+
 // load plugins
 $plugins = array();
 if (is_dir("plugins")) {
@@ -37,7 +44,7 @@ function plugins_include($phpFile)
 if (! function_exists('getImageLink')) {
 function getImageLink($imageSimplePath)
 {
-	return dirname($_SERVER["SCRIPT_NAME"]).'/'.IMAGES_DIR.$imageSimplePath;
+	return $GLOBALS['rootUrl'].IMAGES_DIR.$imageSimplePath;
 }
 }
 
@@ -86,7 +93,7 @@ function getPreview($imgFile, $maxSize = THUMB_SIZE)
 		imagedestroy($newImg);
 	}
 
-	return dirname($_SERVER["SCRIPT_NAME"])."/".$newImgFile;
+	return $GLOBALS['rootUrl'].$newImgFile;
 }
 
 function getAlbumPreview($dir)
@@ -99,11 +106,6 @@ function getAlbumPreview($dir)
 
 	return '';
 }
-
-$scriptUrl = $_SERVER["SCRIPT_NAME"];
-$rootUrl = dirname($scriptUrl);
-// $scriptUrl =  "/path/to/bizou/index.php"
-// $rootUrl =  "/path/to/bizou"
 
 // if url == http://localhost/photos/index.php/toto/titi, path_info == /toto/titi
 // if url == http://localhost/photos/index.php, path_info is not set
@@ -146,7 +148,7 @@ foreach (scandir($realDir) as $file) if ($file != '.' and $file != '..')
 		if ($ext == ".jpg" or $ext == ".png") {
 			$imageFiles[] = array( "name" => $file, "url" => getPreview("$realDir/$file"), "link" => getImageLink("$simplePath/$file") );
 		} else {
-			$otherFiles[] = array( "name" => $file, "link" => "$rootUrl/$realDir/$file" );
+			$otherFiles[] = array( "name" => $file, "link" => "$rootUrl$realDir/$file" );
 		}
 	}
 }
@@ -205,7 +207,7 @@ a {
 }
 </style>
 <?php foreach ($plugins as $p) if (is_file("plugins/$p/style.css")) { ?>
-	<link rel="stylesheet" type="text/css" href="<?php echo "$rootUrl/plugins/$p/style.css" ?>" />
+	<link rel="stylesheet" type="text/css" href="<?php echo $rootUrl."plugins/$p/style.css" ?>" />
 <?php } ?>
 </head>
 <body>
