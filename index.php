@@ -69,6 +69,9 @@ function getPreview($imgFile, $maxSize = THUMB_SIZE)
 			return $imgFile;
 		}
 
+		# uncomment this if you need group writable files
+		#umask(0002);
+
 		# create the thumbs directory recursively
 		if (! is_dir(dirname($newImgFile))) mkdir(dirname($newImgFile), 0777, true);
 
