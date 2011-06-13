@@ -48,6 +48,29 @@ function getImageLink($imageSimplePath)
 }
 }
 
+// functions to display a "progress page" when thumbs are generating
+function beginGenerating ()
+{
+	if (! isset($GLOBALS["generating"])) {
+		echo "<p> <i><b>If you get: \"Fatal error: Maximum execution time exceeded\", refresh this page.</b></i><br/> Please wait while generating thumbnails:<p/>\n";
+		ob_flush(); flush();
+		$GLOBALS["generating"] = true;
+	}
+}
+function displayGenerated($thumbFile)
+{
+	if (isset($GLOBALS["generating"])) {
+		echo basename($thumbFile)."\n";
+		ob_flush(); flush();
+	}
+}
+function endGenerating() {
+	if (isset($GLOBALS["generating"])) {
+		echo "<p>Finished. This page will be refreshed.</p> <script>window.location.reload();</script>\n";
+		exit();
+	}
+}
+
 function getPreview($imgFile, $maxSize = THUMB_SIZE)
 {
 	# example: data/myalbum/100.mypic.jpg
@@ -55,6 +78,11 @@ function getPreview($imgFile, $maxSize = THUMB_SIZE)
 	
 	if (! is_file($newImgFile))
 	{
+		beginGenerating();
+
+		# reset script time limit to 20s (wont work in safe mode)
+		set_time_limit(20);
+
 		$ext = strtolower(substr($imgFile, -4));
 		if ($ext == ".jpg")
 			$img = imagecreatefromjpeg($imgFile);
@@ -94,6 +122,8 @@ function getPreview($imgFile, $maxSize = THUMB_SIZE)
 		
 		imagedestroy($img);
 		imagedestroy($newImg);
+
+		displayGenerated($newImgFile);
 	}
 
 	return $GLOBALS['rootUrl'].$newImgFile;
@@ -155,6 +185,8 @@ foreach (scandir($realDir) as $file) if ($file != '.' and $file != '..')
 		}
 	}
 }
+
+endGenerating();
 
 if (dirname($simplePath) !== '')
 	$parentLink = $scriptUrl.dirname($simplePath);
