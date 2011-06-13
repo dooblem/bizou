@@ -27,15 +27,6 @@ $out = exec("tar --no-recursion --totals -cf /dev/null $filesarg 2>&1");
 preg_match('/^Total bytes written: ([0-9]+) /', $out, $matches);
 $totalsize = $matches[1];
 
-#$out = exec("du -c $filesarg");
-#preg_match('/^([0-9]+).*total$/', $out, $matches);
-#$totalsize = $matches[1] * 1024;
-
-#var_dump($totalsize);
-
-#var_dump("tar --no-recursion -c $filesarg");
-#die();
-
 header("Content-Length: $totalsize");
 header('Content-Type: application/x-tar');
 header('Content-Disposition: attachment; filename="'.basename($realDir).'.tar"');
