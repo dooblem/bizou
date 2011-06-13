@@ -66,7 +66,7 @@ if ($nextImage === '') {
 	$nextImageUrl = '';
 	$nextPageUrl = '';
 } else {
-	$nextImageUrl = $bizouRootUrl.IMAGES_DIR.dirname($simpleImagePath)."/$nextImage";
+	$nextImageUrl = dirname($bizouRootUrl.IMAGES_DIR.$simpleImagePath)."/$nextImage";
 	$nextPageUrl = dirname($_SERVER["REQUEST_URI"])."/$nextImage";
 }
 if ($prevImage === '') $prevPageUrl = '';
