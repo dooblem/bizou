@@ -48,13 +48,18 @@ if ( ! is_dir($realDir) ) {
 # change to the parent directory
 chdir(dirname($realDir));
 
-$filesarg = escapeshellarg(basename($realDir))."/*";
+$filesarg = basename($realDir);
+# same as escapeshellarg function but this supports utf8 regardless of locale
+$filesarg = "'".str_replace("'", "'\\''", $filesarg)."'";
+$filesarg = "$filesarg/*";
 
 # compute and send content-length header
 if ($SEND_CONTENT_LENGTH) {
-	$out = exec("tar $TAR_FLAGS --totals -cf /dev/null $filesarg 2>&1");
+	$out = exec("tar $TAR_FLAGS --totals -cf /dev/null $filesarg 2>&1", $output, $ret);
 	preg_match('/^Total bytes written: ([0-9]+) /', $out, $matches);
 	$totalsize = $matches[1];
+
+	($totalsize > 1000 and $ret === 0) or die("Could not tar: $filesarg. Try checking permissions.");
 
 	header("Content-Length: $totalsize");
 }
