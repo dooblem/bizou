@@ -48,37 +48,18 @@ function getImageLink($imageSimplePath)
 }
 }
 
-// functions to display a "progress page" when thumbs are generating
-function beginGenerating ()
-{
-	if (! isset($GLOBALS["generating"])) {
-		echo "<p> <i><b>If you get: \"Fatal error: Maximum execution time exceeded\", refresh this page.</b></i><br/> Please wait while generating thumbnails:<p/>\n";
-		ob_flush(); flush();
-		$GLOBALS["generating"] = true;
-	}
-}
-function displayGenerated($thumbFile)
-{
-	if (isset($GLOBALS["generating"])) {
-		echo basename($thumbFile)."\n";
-		ob_flush(); flush();
-	}
-}
-function endGenerating() {
-	if (isset($GLOBALS["generating"])) {
-		echo "<p>Finished. This page will be refreshed.</p> <script>window.location.reload();</script>\n";
-		exit();
-	}
-}
-
 function getPreview($imgFile, $maxSize = THUMB_SIZE)
 {
 	# example: data/myalbum/100.mypic.jpg
 	$newImgFile = DATA_DIR."/".dirname($imgFile)."/".$maxSize.".".basename($imgFile);
 	
+	# if the preview is a symlink, image is already good sized
+	if (is_link($newImgFile)) return $imgFile;
+	
 	if (! is_file($newImgFile))
 	{
-		beginGenerating();
+		# this tels the template to flush output after displaying previews
+		$GLOBALS["generating"] = true;
 
 		# reset script time limit to 20s (wont work in safe mode)
 		set_time_limit(20);
@@ -91,15 +72,15 @@ function getPreview($imgFile, $maxSize = THUMB_SIZE)
 
 		$w = imagesx($img);
 		$h = imagesy($img);
-		# don't do anything if the image is already small
+		# if the image is already small, make a symlink, and return it
 		if ($w <= $maxSize and $h <= $maxSize) {
 			imagedestroy($img);
+			symlink($imgFile, $newImgFile);
 			return $imgFile;
 		}
 
 		# uncomment this if you need group writable files
 		#umask(0002);
-
 		# create the thumbs directory recursively
 		if (! is_dir(dirname($newImgFile))) mkdir(dirname($newImgFile), 0777, true);
 
@@ -122,22 +103,48 @@ function getPreview($imgFile, $maxSize = THUMB_SIZE)
 		
 		imagedestroy($img);
 		imagedestroy($newImg);
-
-		displayGenerated($newImgFile);
 	}
 
-	return $GLOBALS['rootUrl'].$newImgFile;
+	return $newImgFile;
 }
 
 function getAlbumPreview($dir)
 {
-	foreach (scandir($dir) as $file) if ($file != '.' and $file != '..') {
-		$ext = strtolower(substr($file, -4));
-		if ($ext == ".jpg" or $ext == ".png")
-			return getPreview("$dir/$file");
-	}
+	$previewFile = DATA_DIR."/$dir/albumpreview";
 
-	return '';
+	if (is_file("$previewFile.jpg")) {
+		return "$previewFile.jpg";
+	} else if (is_file("$previewFile.empty")) {
+		return "";
+	} else if (is_file("$previewFile.png")) {
+		return "$previewFile.png";
+	} else {
+		# uncomment this if you need group writable files
+		#umask(0002);
+		# create the thumbs directory recursively
+		if (! is_dir(dirname($previewFile))) mkdir(dirname($previewFile), 0777, true);
+
+		// no preview: look for a preview in current dir, write it, return it
+		foreach (scandir($dir) as $file) if ($file != '.' and $file != '..') {
+			$ext = strtolower(substr($file, -4));
+			if ($ext == ".jpg" or $ext == ".png") {
+				$thumb = getPreview("$dir/$file");
+				copy($thumb, $previewFile.$ext);
+				return $previewFile.$ext;
+			} else if (is_dir("$dir/$file")) {
+				$subPreview = getAlbumPreview("$dir/$file");
+				if ($subPreview) {
+					$myPreview = dirname($previewFile)."/".basename($subPreview);
+					copy($subPreview, $myPreview);
+					return $myPreview;
+				}
+			}
+		}
+
+		// nothing found. create empty file
+		touch("$previewFile.empty");
+		return "";
+	}
 }
 
 // if url == http://localhost/photos/index.php/toto/titi, path_info == /toto/titi
@@ -173,20 +180,18 @@ foreach (scandir($realDir) as $file) if ($file != '.' and $file != '..')
 {
 	if (is_dir("$realDir/$file"))
 	{
-		$folders[] = array( "name" => $file, "link" => "$scriptUrl$simplePath/$file", "preview" => getAlbumPreview("$realDir/$file") );
+		$folders[] = array( "name" => $file, "file" => "$realDir/$file", "link" => "$scriptUrl$simplePath/$file" );
 	}
 	else
 	{
 		$ext = strtolower(substr($file, -4));
 		if ($ext == ".jpg" or $ext == ".png") {
-			$imageFiles[] = array( "name" => $file, "url" => getPreview("$realDir/$file"), "link" => getImageLink("$simplePath/$file") );
+			$imageFiles[] = array( "name" => $file, "file" => "$realDir/$file", "link" => getImageLink("$simplePath/$file") );
 		} else {
 			$otherFiles[] = array( "name" => $file, "link" => "$rootUrl$realDir/$file" );
 		}
 	}
 }
-
-endGenerating();
 
 if (dirname($simplePath) !== '')
 	$parentLink = $scriptUrl.dirname($simplePath);

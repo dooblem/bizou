@@ -54,20 +54,22 @@ a {
 
 <?php plugins_include("before_content.php") ?>
 
-<?php foreach($folders as $folder) { ?>
+<?php foreach($folders as $folder) { $preview = getAlbumPreview($folder["file"]); ?>
 	<div class="folder">
-	<?php if ($folder["preview"] === "") { ?>
+	<?php if ($preview === "") { ?>
 		<div class="square"><div class="image_nopreview"> - </div></div>
 		<div class="square"><div class="foldername_nopreview"> <a href="<?php echo $folder["link"] ?>"><?php echo $folder["name"] ?></a> </div></div>
 	<?php } else { ?>
-		<div class="square"><div class="image"> <a href="<?php echo $folder["link"] ?>"><img src="<?php echo $folder["preview"] ?>" /></a> </div></div>
+		<div class="square"><div class="image"> <a href="<?php echo $folder["link"] ?>"><img src="<?php echo $rootUrl.$preview ?>" /></a> </div></div>
 		<div class="square"><div class="foldername"> <a href="<?php echo $folder["link"] ?>"><?php echo $folder["name"] ?></a> </div></div>
+		<?php if (isset($generating)) { ob_flush(); flush(); } ?>
 	<?php } ?>
 	</div>
 <?php } ?>
 
 <?php foreach ($imageFiles as $file) { ?>
-	<div class="square"><div class="image"><a href="<?php echo $file["link"] ?>"><img src="<?php echo $file["url"] ?>" alt="<?php echo $file["name"] ?>" /></a></div></div>
+	<div class="square"><div class="image"><a href="<?php echo $file["link"] ?>"><img src="<?php echo $rootUrl.getPreview($file["file"]) ?>" alt="<?php echo $file["name"] ?>" /></a></div></div>
+	<?php if (isset($generating)) { ob_flush(); flush(); } ?>
 <?php } ?>
 
 <?php foreach ($otherFiles as $file) { ?>
