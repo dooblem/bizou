@@ -19,12 +19,10 @@
 
 $bizouRootFromHere = '../..';
 require "$bizouRootFromHere/config.php";
+require "$bizouRootFromHere/functions.php";
 
-$simpleImagePath = $_SERVER["PATH_INFO"];
-if ($simpleImagePath == '/') $simpleImagePath = '';
-// extra security check to avoid /photos/index/../.. like urls, maybe useless but..
-if (strpos($simpleImagePath, '..') !== false) die(".. found in url");
-
+// extract /path/to/image.jpg from /view.php/path/to/image.jpg
+$simpleImagePath = getPathInfo();
 
 if (! is_file("$bizouRootFromHere/".IMAGES_DIR.$simpleImagePath)) {
 	header("HTTP/1.1 404 Not Found");
