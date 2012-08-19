@@ -63,8 +63,8 @@ function getPreview($imgFile, $maxSize = THUMB_SIZE)
 			return $imgFile;
 		}
 
-		# uncomment this if you need group writable files
-		#umask(0002);
+		# config to allow group writable files
+		umask(DATA_UMASK);
 		# create the thumbs directory recursively
 		if (! is_dir(dirname($newImgFile))) mkdir(dirname($newImgFile), 0777, true);
 
@@ -103,8 +103,8 @@ function getAlbumPreview($dir)
 	} else if (is_file("$previewFile.png")) {
 		return "$previewFile.png";
 	} else {
-		# uncomment this if you need group writable files
-		#umask(0002);
+		# config to allow group writable files
+		umask(DATA_UMASK);
 		# create the thumbs directory recursively
 		if (! is_dir(dirname($previewFile))) mkdir(dirname($previewFile), 0777, true);
 
