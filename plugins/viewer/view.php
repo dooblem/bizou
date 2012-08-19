@@ -33,7 +33,8 @@ if (! is_file("$bizouRootFromHere/".IMAGES_DIR.$simpleImagePath)) {
 $images = array();
 
 $files = scandir("$bizouRootFromHere/".IMAGES_DIR.dirname($simpleImagePath));
-foreach ($files as $file) {
+foreach ($files as $file) if ($file[0] != '.')
+{
 	$ext = strtolower(substr($file, -4));
 	if ($ext == ".jpg" or $ext == ".png")
 		$images[] = $file;

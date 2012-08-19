@@ -55,7 +55,7 @@ $folders = array();
 $imageFiles = array();
 $otherFiles = array();
 
-foreach (scandir($realDir) as $file) if ($file != '.' and $file != '..')
+foreach (scandir($realDir) as $file) if ($file[0] != '.')
 {
 	if (is_dir("$realDir/$file"))
 	{

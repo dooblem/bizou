@@ -109,7 +109,7 @@ function getAlbumPreview($dir)
 		if (! is_dir(dirname($previewFile))) mkdir(dirname($previewFile), 0777, true);
 
 		// no preview: look for a preview in current dir, write it, return it
-		foreach (scandir($dir) as $file) if ($file != '.' and $file != '..') {
+		foreach (scandir($dir) as $file) if ($file[0] != '.') {
 			$ext = strtolower(substr($file, -4));
 			if ($ext == ".jpg" or $ext == ".png") {
 				$thumb = getPreview("$dir/$file");
