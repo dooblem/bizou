@@ -1,0 +1,16 @@
+body { 
+	background-color : #2e2e2e;
+	}
+
+a {
+ 	color : white;
+	
+	}
+div.folder img {
+	border: 2px solid white;
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+	-webkit-box-shadow: 4px 4px 4px #000000;
+	-moz-box-shadow: 4px 4px 4px #000000;
+	box-shadow: 4px 4px 4px #000000;
+	}
