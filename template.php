@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title> <?php echo $realDir ?> </title>
+<title> <?= $realDir ?> </title>
 <style type="text/css">
 body {
 	margin-top: 0;
@@ -21,11 +21,11 @@ a {
 	vertical-align: middle;
 }
 .image, .image_nopreview {
-	width: <?php echo THUMB_SIZE ?>px;
+	width: <?= THUMB_SIZE ?>px;
 	text-align: center;
 }
 .image, .foldername {
-	height: <?php echo THUMB_SIZE ?>px;
+	height: <?= THUMB_SIZE ?>px;
 }
 .foldername, .foldername_nopreview {
 	padding-left: 1ex;
@@ -42,13 +42,13 @@ a {
 }
 </style>
 <?php foreach ($plugins as $p) if (is_file("plugins/$p/style.css")) { ?>
-	<link rel="stylesheet" type="text/css" href="<?php echo $rootUrl."plugins/$p/style.css" ?>" />
+	<link rel="stylesheet" type="text/css" href="<?= $rootUrl."plugins/$p/style.css" ?>" />
 <?php } ?>
 <?php plugins_include("head.php") ?>
 </head>
 <body>
 
-<div id="parentfolder"><a href="<?php echo $parentLink ?>">
+<div id="parentfolder"><a href="<?= $parentLink ?>">
 <?php if ($parentLink !== '') { ?>
 ^
 <?php } ?>
@@ -61,10 +61,10 @@ a {
 	<div class="folder">
 	<?php if ($preview === "") { ?>
 		<div class="square"><div class="image_nopreview"> - </div></div>
-		<div class="square"><div class="foldername_nopreview"> <a href="<?php echo $folder["link"] ?>"><?php echo $folder["name"] ?></a> </div></div>
+		<div class="square"><div class="foldername_nopreview"> <a href="<?= $folder["link"] ?>"><?= $folder["name"] ?></a> </div></div>
 	<?php } else { ?>
-		<div class="square"><div class="image"> <a href="<?php echo $folder["link"] ?>"><img src="<?php echo $rootUrl.$preview ?>" /></a> </div></div>
-		<div class="square"><div class="foldername"> <a href="<?php echo $folder["link"] ?>"><?php echo $folder["name"] ?></a> </div></div>
+		<div class="square"><div class="image"> <a href="<?= $folder["link"] ?>"><img src="<?= $rootUrl.$preview ?>" /></a> </div></div>
+		<div class="square"><div class="foldername"> <a href="<?= $folder["link"] ?>"><?= $folder["name"] ?></a> </div></div>
 		<?php if (isset($generating)) { ob_flush(); flush(); } ?>
 	<?php } ?>
 	</div>
@@ -73,14 +73,14 @@ a {
 
 <div id="images">
 <?php foreach ($imageFiles as $file) { ?>
-	<div class="square"><div class="image"><a href="<?php echo $file["link"] ?>"><img src="<?php echo $rootUrl.getPreview($file["file"]) ?>" alt="<?php echo $file["name"] ?>" /></a></div></div>
+	<div class="square"><div class="image"><a href="<?= $file["link"] ?>"><img src="<?= $rootUrl.getPreview($file["file"]) ?>" alt="<?= $file["name"] ?>" /></a></div></div>
 	<?php if (isset($generating)) { ob_flush(); flush(); } ?>
 <?php } ?>
 </div>
 
 <div id="miscfiles">
 <?php foreach ($otherFiles as $file) { ?>
-	<div class="miscfile"><a href="<?php echo $file["link"] ?>"><?php echo $file["name"] ?></a></div>
+	<div class="miscfile"><a href="<?= $file["link"] ?>"><?= $file["name"] ?></a></div>
 <?php } ?>
 </div>
 

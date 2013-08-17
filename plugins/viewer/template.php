@@ -1,6 +1,6 @@
 <html>
 <head>
-<title> <?php echo IMAGES_DIR.$simpleImagePath ?> </title>
+<title> <?= IMAGES_DIR.$simpleImagePath ?> </title>
 <style type="text/css">
 html, body {
 height: 100%;
@@ -45,28 +45,28 @@ img {
 </style>
 
 <?php if ($nextImageUrl !== '' and $firefox) { ?>
-<link rel="prefetch" href="<?php echo $nextImageUrl ?>" />
-<link rel="prefetch" href="<?php echo $nextPageUrl ?>" />
+<link rel="prefetch" href="<?= $nextImageUrl ?>" />
+<link rel="prefetch" href="<?= $nextPageUrl ?>" />
 <?php } ?>
 
 </head>
 <body>
 
-<a href="<?php echo $imageUrl ?>"><img src="<?php echo $imageUrl ?>" id="theimage" /></a>
+<a href="<?= $imageUrl ?>"><img src="<?= $imageUrl ?>" id="theimage" /></a>
 
 <div id="up">
-<a href="<?php echo $directoryUrl ?>" title="Back to directory">^</a>
+<a href="<?= $directoryUrl ?>" title="Back to directory">^</a>
 </div>
 
 <?php if ($nextPageUrl !== '') { ?>
 <div id="next">
-<a href="<?php echo $nextPageUrl ?>" title="Next image">&gt;</a>
+<a href="<?= $nextPageUrl ?>" title="Next image">&gt;</a>
 </div>
 <?php } ?>
 
 <?php if ($prevPageUrl !== '') { ?>
 <div id="previous">
-<a href="<?php echo $prevPageUrl ?>" title="Previous image">&lt;</a>
+<a href="<?= $prevPageUrl ?>" title="Previous image">&lt;</a>
 </div>
 <?php } ?>
 
@@ -75,9 +75,9 @@ img {
 <?php if ($nextImageUrl !== '' and ! $firefox) { ?>
 window.onload = function() { // for browsers not supporting link rel=prefetch
 	var im = new Image();
-	im.src = '<?php echo $nextImageUrl ?>';
+	im.src = '<?= $nextImageUrl ?>';
 	var req = new XMLHttpRequest();
-	req.open('GET', '<?php echo $nextPageUrl ?>', false);
+	req.open('GET', '<?= $nextPageUrl ?>', false);
 	req.send(null);
 };
 <?php } ?>
@@ -87,17 +87,17 @@ function keyup(e)
 {
 	switch (e.keyCode) {
 		case 37: // left
-			window.location = "<?php echo $prevPageUrl ?>";
+			window.location = "<?= $prevPageUrl ?>";
 		break;
 		case 39: // right
 		case 32: // space
-			window.location = "<?php echo $nextPageUrl ?>";
+			window.location = "<?= $nextPageUrl ?>";
 		break;
 		case 38: // up  (down is 40)
-			window.location = "<?php echo $directoryUrl ?>";
+			window.location = "<?= $directoryUrl ?>";
 		break;
 		case 13: // enter
-			window.location = "<?php echo $imageUrl ?>";
+			window.location = "<?= $imageUrl ?>";
 		break;
 	}
 }
