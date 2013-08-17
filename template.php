@@ -44,6 +44,7 @@ a {
 <?php foreach ($plugins as $p) if (is_file("plugins/$p/style.css")) { ?>
 	<link rel="stylesheet" type="text/css" href="<?php echo $rootUrl."plugins/$p/style.css" ?>" />
 <?php } ?>
+<?php plugins_include("head.php") ?>
 </head>
 <body>
 

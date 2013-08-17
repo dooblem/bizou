@@ -32,6 +32,7 @@ function getImageLink($imageSimplePath)
 }
 }
 
+if (! function_exists('getPreview')) {
 function getPreview($imgFile, $maxSize = THUMB_SIZE)
 {
 	# example: data/myalbum/100.mypic.jpg
@@ -90,6 +91,7 @@ function getPreview($imgFile, $maxSize = THUMB_SIZE)
 	}
 
 	return $newImgFile;
+}
 }
 
 function getAlbumPreview($dir)
