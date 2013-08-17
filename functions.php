@@ -67,7 +67,8 @@ function getPreview($imgFile, $maxSize = THUMB_SIZE)
 		# config to allow group writable files
 		umask(DATA_UMASK);
 		# create the thumbs directory recursively
-		if (! is_dir(dirname($newImgFile))) mkdir(dirname($newImgFile), 0777, true);
+		if (! is_dir(dirname($newImgFile))) @mkdir(dirname($newImgFile), 0777, true)
+			or die("Could not write in data dir. Please fix permissions.");
 
 		if ($w > $h) {
 			$newW = $maxSize;
@@ -108,7 +109,8 @@ function getAlbumPreview($dir)
 		# config to allow group writable files
 		umask(DATA_UMASK);
 		# create the thumbs directory recursively
-		if (! is_dir(dirname($previewFile))) mkdir(dirname($previewFile), 0777, true);
+		if (! is_dir(dirname($previewFile))) @mkdir(dirname($previewFile), 0777, true)
+			or die("Could not write in data dir. Please fix permissions.");
 
 		// no preview: look for a preview in current dir, write it, return it
 		foreach (scandir($dir) as $file) if ($file[0] != '.') {
