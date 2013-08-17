@@ -1,0 +1,13 @@
+#images .square {
+        display: block;
+        float: left;
+        margin: 1px;
+}
+#images .image {
+        display: block;
+}
+#images {
+        overflow: hidden;
+	clear: both;
+	margin-bottom: 1ex;
+}

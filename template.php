@@ -56,6 +56,7 @@ a {
 
 <?php plugins_include("before_content.php") ?>
 
+<div id="folders">
 <?php foreach($folders as $folder) { $preview = getAlbumPreview($folder["file"]); ?>
 	<div class="folder">
 	<?php if ($preview === "") { ?>
@@ -68,15 +69,20 @@ a {
 	<?php } ?>
 	</div>
 <?php } ?>
+</div>
 
+<div id="images">
 <?php foreach ($imageFiles as $file) { ?>
 	<div class="square"><div class="image"><a href="<?php echo $file["link"] ?>"><img src="<?php echo $rootUrl.getPreview($file["file"]) ?>" alt="<?php echo $file["name"] ?>" /></a></div></div>
 	<?php if (isset($generating)) { ob_flush(); flush(); } ?>
 <?php } ?>
+</div>
 
+<div id="miscfiles">
 <?php foreach ($otherFiles as $file) { ?>
 	<div class="miscfile"><a href="<?php echo $file["link"] ?>"><?php echo $file["name"] ?></a></div>
 <?php } ?>
+</div>
 
 <?php plugins_include("after_content.php") ?>
 
