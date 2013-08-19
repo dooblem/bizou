@@ -16,7 +16,6 @@ a {
 .square {
 	display: inline-block;
 	vertical-align: top;
-	height: <?= THUMB_SIZE ?>px;
 }
 .image, .foldername, .image_nopreview, .foldername_nopreview {
 	display: table-cell;
@@ -75,7 +74,7 @@ a {
 
 <div id="images">
 <?php foreach ($imageFiles as $file) { ?>
-	<div class="square"><div class="image"><a href="<?= $file["link"] ?>"><img src="<?= $rootUrl.getPreview($file["file"]) ?>" alt="<?= $file["name"] ?>" /></a></div><?php plugins_include("after_thumb.php") ?></div>
+	<div class="square"><div class="image imagepreview"><a href="<?= $file["link"] ?>"><img src="<?= $rootUrl.getPreview($file["file"]) ?>" alt="<?= $file["name"] ?>" /></a></div><?php plugins_include("after_thumb.php") ?></div>
 	<?php if (isset($generating)) { ob_flush(); flush(); } ?>
 <?php } ?>
 </div>
