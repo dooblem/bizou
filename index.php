@@ -77,6 +77,8 @@ if (dirname($simplePath) !== '')
 else
 	$parentLink = "";
 
+plugins_include("before_tpl.php");
+
 ///// template starts here /////
 header('Content-Type: text/html; charset=utf-8');
 header('Cache-Control: max-age=3600');
