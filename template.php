@@ -61,7 +61,7 @@ a {
 <?php foreach($folders as $folder) { $preview = getAlbumPreview($folder["file"]); ?>
 	<div class="folder">
 	<?php if ($preview === "") { ?>
-		<div class="square"><div class="image_nopreview"> - </div></div>
+		<div class="square"><div class="image_nopreview"><a href="<?= $folder["link"] ?>">■</a></div></div>
 		<div class="square"><div class="foldername_nopreview"> <a href="<?= $folder["link"] ?>"><?= $folder["name"] ?></a> </div></div>
 	<?php } else { ?>
 		<div class="square"><div class="image"> <a href="<?= $folder["link"] ?>"><img src="<?= $rootUrl.$preview ?>" /></a> </div></div>
