@@ -49,11 +49,11 @@ a {
 </head>
 <body>
 
-<div id="parentfolder"><a href="<?= $parentLink ?>">
+<div id="parentfolder">
 <?php if ($parentLink !== '') { ?>
-^
+<a href="<?= $parentLink ?>">^</a>
 <?php } ?>
-&nbsp;</a></div>
+</div>
 
 <?php plugins_include("before_content.php") ?>
 
