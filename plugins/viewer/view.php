@@ -77,7 +77,7 @@ $firefox = strpos($_SERVER['HTTP_USER_AGENT'], 'Firefox') !== false;
 
 ///// template starts here /////
 header('Content-Type: text/html; charset=utf-8');
-header('Expires: '.gmdate('D, d M Y H:i:s \G\M\T', time() + 3600));
+header('Cache-Control: max-age=3600');
 
 require 'template.php';
 
