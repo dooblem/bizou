@@ -63,7 +63,7 @@ else {
 
 if (is_dir("$bizouRootFromHere/".IMAGES_DIR."/".$folder)) {
 
-        $tmp = tempnam("/tmp", "bizou_"); // Getting a temporary file.
+        $tmp = tempnam(ini_get("upload_tmp_dir"), "bizou_"); // Getting a temporary file.
         unlink($tmp); // Deleting the temporary file in order to recreate it as a zip archive.
 
 	// Creating zip archive.
