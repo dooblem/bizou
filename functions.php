@@ -50,10 +50,13 @@ function getPreview($imgFile, $maxSize = THUMB_SIZE)
 		set_time_limit(20);
 
 		$ext = strtolower(substr($imgFile, -4));
-		if ($ext == ".jpg")
+		if ($ext == ".jpg") {
 			$img = imagecreatefromjpeg($imgFile);
-		else
+			$exif = exif_read_data($imgFile);
+		} else {
 			$img = imagecreatefrompng($imgFile);
+		}
+		if ($img === false) return ""; #read error (wrong permission...)
 
 		$w = imagesx($img);
 		$h = imagesy($img);
@@ -82,10 +85,17 @@ function getPreview($imgFile, $maxSize = THUMB_SIZE)
 
 		imagecopyresampled($newImg, $img, 0, 0, 0, 0, $newW, $newH, $w, $h);
 
-		if ($ext == ".jpg")
-			imagejpeg($newImg, $newImgFile);
-		else
+		if ($ext == ".jpg") {
+			if (!empty($exif['Orientation'])) {
+				$orientation = $exif['Orientation'];
+				if     ($orientation === 3) $newImg = imagerotate($newImg, 180, 0);
+				elseif ($orientation === 6) $newImg = imagerotate($newImg, -90, 0);
+				elseif ($orientation === 8) $newImg = imagerotate($newImg, 90, 0);
+			}
+			imagejpeg($newImg, $newImgFile, JPEG_QUALITY);
+		} else {
 			imagepng($newImg, $newImgFile);
+		}
 		
 		imagedestroy($img);
 		imagedestroy($newImg);
